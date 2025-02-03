@@ -19,35 +19,21 @@ const MOCK_DATA = {
   },
 }
 
-const MENU_ITEMS = {
-  menus: [
-    {
-      title: "Familie Special",
-      description: "2 große Pizzen nach Wahl, 1L Getränk, 2 Desserts",
-      price: 39.90,
-    },
-    {
-      title: "Pasta Duo",
-      description: "2 Pasta-Gerichte nach Wahl, 2 Salate, 2 Desserts",
-      price: 29.90,
-    },
-    {
-      title: "Pizza Party",
-      description: "3 mittlere Pizzen, 4 Getränke, Knoblauchbrot",
-      price: 44.90,
-    },
-    {
-      title: "Mittagsmenü",
-      description: "1 Pizza oder Pasta, 1 Salat, 1 Getränk",
-      price: 14.90,
-    },
-    {
-      title: "Date Night",
-      description: "2 Pizzen, 1 Dessert zum Teilen, 2 Getränke",
-      price: 32.90,
-    },
-  ],
-  popular: [
+const generateMenuItems = (basePrice: number, count: number, isPopular = false) => {
+  const items = [];
+  for (let i = 1; i <= count; i++) {
+    items.push({
+      title: `Menü ${i}`,
+      description: `Leckere Kombination aus verschiedenen Gerichten ${i}`,
+      price: basePrice + (i * 0.5),
+      isPopular,
+    });
+  }
+  return items;
+};
+
+const generatePopularItems = (count: number) => {
+  const items = [
     {
       title: "Pizza Margherita",
       description: "Tomatensoße, Mozzarella, frisches Basilikum",
@@ -78,8 +64,15 @@ const MENU_ITEMS = {
       price: 6.90,
       isPopular: true,
     },
-  ],
-}
+    ...generateMenuItems(14.90, count - 5, true),
+  ];
+  return items;
+};
+
+const MENU_ITEMS = {
+  menus: generateMenuItems(19.90, 25),
+  popular: generatePopularItems(25),
+};
 
 const Menu = () => {
   const [loading, setLoading] = useState(true)
@@ -109,7 +102,7 @@ const Menu = () => {
 
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen w-full bg-white">
+      <div className="flex min-h-screen w-full bg-[#E6E6E6]">
         <AppSidebar />
         <main className="flex-1">
           <ContactInfo
